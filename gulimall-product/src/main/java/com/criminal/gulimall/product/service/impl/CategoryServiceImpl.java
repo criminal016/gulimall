@@ -36,6 +36,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         // 1,查出所有分类
         // 2，组装成父子树形结构
 
+        // TODO 当前台在二级菜单后面添加三级菜单的之后，添加的三级菜单差不出来！！！
+
         List<CategoryEntity> entities = baseMapper.selectList(null);
 
         // 查找所有的一级分类
@@ -49,6 +51,14 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         }).collect(Collectors.toList());
 
         return levelMenus;
+    }
+
+    @Override
+    public void removeMenuBtIds(List<Long> asList) {
+        // TODO 检查当前菜单是否被其他地方引用
+
+        // 逻辑删除
+        baseMapper.deleteBatchIds(asList);
     }
 
     private List<CategoryEntity> getChildrens(CategoryEntity root, List<CategoryEntity> all){

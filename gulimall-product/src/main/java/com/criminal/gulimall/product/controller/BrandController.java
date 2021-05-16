@@ -1,9 +1,14 @@
 package com.criminal.gulimall.product.controller;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
+import com.criminal.common.valid.AddGroup;
+import com.criminal.common.valid.UpdateGroup;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +20,7 @@ import com.criminal.gulimall.product.service.BrandService;
 import com.criminal.common.utils.PageUtils;
 import com.criminal.common.utils.R;
 
+import javax.validation.Valid;
 
 
 /**
@@ -55,11 +61,23 @@ public class BrandController {
 
     /**
      * 保存
+     * 数据校验
      */
     @RequestMapping("/save")
     // @RequiresPermissions("product:brand:save")
-    public R save(@RequestBody BrandEntity brand){
-		brandService.save(brand);
+    public R save(@Validated({AddGroup.class}) @RequestBody BrandEntity brand){
+//    public R save(@Valid @RequestBody BrandEntity brand, BindingResult bindingResult){
+//		if (bindingResult.hasErrors()) {
+            Map<String, String> map = new HashMap<>();
+//            bindingResult.getFieldErrors().forEach((item) -> {
+//                final String defaultMessage = item.getDefaultMessage();
+//                final String field = item.getField();
+//                map.put(field, defaultMessage);
+//            });
+//          return   R.error(400, "提交的数据不合法！").put("data", map);
+//        }
+
+        brandService.save(brand);
 
         return R.ok();
     }
@@ -69,7 +87,7 @@ public class BrandController {
      */
     @RequestMapping("/update")
     // @RequiresPermissions("product:brand:update")
-    public R update(@RequestBody BrandEntity brand){
+    public R update(@Validated({UpdateGroup.class}) @RequestBody BrandEntity brand){
 		brandService.updateById(brand);
 
         return R.ok();

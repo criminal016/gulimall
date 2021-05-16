@@ -17,8 +17,17 @@ spring:
           predicates:
             - Path=/api/product/**
           filters:
-            - RewritePath=/api/(?<segment>.*),//$\{segment}
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
 
+        - id: third_party_route
+            # 负载均衡到后面的服务
+          uri: lb://gulimall-third-party
+          predicates:
+            - Path=/api/thirdparty/**
+          filters:
+            - RewritePath=/api/thirdparty/(?<segment>.*),/$\{segment}
+
+        #这个放在最后面，因为是拦截api之后的所有请求
         - id: admin_route
           # 负载均衡到后面的服务
           uri: lb://renren-fast
@@ -27,4 +36,3 @@ spring:
           filters:
             - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
           # 前端项目都带着api
-
